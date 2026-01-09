@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>En Chile no hay democracia — v1.0</title>
+  <style>
+    :root{
+      --bg:#0f1116; --card:#151a28; --text:#e9ecf1; --muted:#aab2c0; --line:#28324a;
+      --accent:#86b7ff; --max: 920px; --radius: 16px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f6f7fb; --card:#fff; --text:#111827; --muted:#516075; --line:#e6e8f2; --accent:#2563eb; }
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--font); color:var(--text); background:var(--bg); line-height:1.65;
+      padding: 18px;
+    }
+    .wrap{ max-width: var(--max); margin: 0 auto; }
+    header{
+      display:flex; gap:12px; align-items:flex-start; justify-content:space-between; margin-bottom:12px;
+    }
+    h1{ font-size:16px; margin:0; letter-spacing:.2px; }
+    .meta{ color:var(--muted); font-size:12.5px; margin-top:4px; }
+    .nav{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;
+    }
+    button{
+      cursor:pointer; border:1px solid var(--line); background:transparent; color:var(--text);
+      padding:10px 12px; border-radius:12px; font-weight:700; font-size:13px;
+    }
+    button:disabled{ opacity:.5; cursor:not-allowed; }
+    select{
+      border:1px solid var(--line); background:transparent; color:var(--text);
+      padding:10px 12px; border-radius:12px; font-size:13px; min-width: 220px;
+    }
+
+    .progress{
+      border:1px solid var(--line); border-radius:12px; overflow:hidden; height:10px; background:rgba(255,255,255,.06);
+      margin: 10px 0 14px;
+    }
+    .progress > div{
+      height:100%; width:0%; background: var(--accent);
+      transition: width .2s ease;
+    }
+    .status{
+      display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:12.5px;
+      margin-bottom: 12px;
+    }
+
+    .card{
+      border:1px solid var(--line); border-radius: var(--radius); background: var(--card);
+      padding: 18px;
+    }
+    .kicker{ color:var(--muted); font-size:13px; margin:0 0 6px; }
+    .title{ font-size:22px; margin:0 0 12px; letter-spacing:.2px; }
+    p{ margin:0 0 12px; font-size:15.5px; }
+    p:last-child{ margin-bottom:0; }
+    .quote{
+      border-left: 3px solid var(--accent);
+      padding: 10px 12px;
+      margin: 14px 0;
+      background: rgba(134,183,255,.10);
+      border-radius: 12px;
+    }
+
+    footer{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12.5px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+
+    @media print{
+      body{ background:#fff; color:#000; }
+      header, .progress, footer{ display:none !important; }
+      .card{ border-color:#ddd; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>En Chile no hay democracia</h1>
+        <div class="meta">Ensayo por secciones (v1.0). Navega con Anterior/Siguiente o el selector.</div>
+      </div>
+
+      <div class="nav">
+        <button id="prevBtn" type="button">Anterior</button>
+        <button id="nextBtn" type="button">Siguiente</button>
+        <select id="sectionSelect" aria-label="Seleccionar sección"></select>
+      </div>
+    </header>
+
+    <div class="progress" aria-label="Progreso de lectura">
+      <div id="progBar"></div>
+    </div>
+
+    <div class="status">
+      <span id="statusLeft">Sección 1/8</span>
+      <span id="statusRight">Premisa</span>
+    </div>
+
+    <main class="card" id="card" aria-live="polite">
+      <p class="kicker" id="kicker"></p>
+      <h2 class="title" id="title"></h2>
+      <div id="body"></div>
+    </main>
+
+    <footer>
+      <span>Atajos: ← / →</span>
+      <span id="hashHint">Link: #premisa</span>
+    </footer>
+  </div>
+
+<script>
+  // Contenido: minimalista, sin features adicionales.
+  const sections = [
+    {
+      id: "premisa",
+      title: "Premisa",
+      kicker: "La tesis como hipótesis crítica (no como consigna)",
+      body: `
+        <p><strong>Sostener que en Chile no hay democracia</strong> puede parecer, a primera vista, una afirmación exagerada o incluso injusta. El país cuenta con elecciones periódicas, alternancia en el poder, instituciones formales y un orden constitucional que se autodefine como democrático.</p>
+        <p>Sin embargo, esta afirmación no pretende negar la existencia de dichos mecanismos, sino cuestionar algo más profundo: <strong>si el sistema político chileno cumple efectivamente con aquello que, en sentido sustantivo, puede denominarse democracia</strong>.</p>
+        <p>La hipótesis que guía este texto es la siguiente: Chile posee un régimen representativo estable, pero <strong>no una democracia plena</strong>, en tanto las personas no participan de manera directa, continua y efectiva en la toma de decisiones que afectan su vida colectiva.</p>
+        <div class="quote">“Decidir” y “elegir quién decide” no son equivalentes.</div>
+        <p>Para evaluar esta hipótesis es necesario clarificar qué entendemos por democracia; luego, observar cómo el concepto se ha materializado históricamente en Chile; y finalmente, analizar si el problema central —la toma de decisiones por parte de las personas— ha sido resuelto o continúa delegado casi por completo en intermediarios políticos.</p>
+      `
+    },
+    {
+      id: "concepto",
+      title: "Democracia como concepto histórico",
+      kicker: "Un término en disputa: formas, tensiones y límites",
+      body: `
+        <p>La democracia no es un concepto estático ni unívoco. A lo largo de la historia ha adoptado distintas formas, significados y justificaciones, siempre en tensión entre el ideal del autogobierno y las limitaciones prácticas de su implementación.</p>
+        <p>Por eso, antes de evaluar el caso chileno, conviene reconocer un punto clave: <strong>llamar “democracia” a un régimen no explica su profundidad</strong>; apenas describe su forma institucional predominante.</p>
+        <p>La pregunta relevante no es si existen elecciones, sino <strong>quién decide</strong>, <strong>cuándo decide</strong> y <strong>cómo se incorpora la voluntad ciudadana</strong> en el ciclo real de toma de decisiones.</p>
+      `
+    },
+    {
+      id: "clasica",
+      title: "Democracia clásica",
+      kicker: "Decidir en primera persona: el núcleo conceptual",
+      body: `
+        <p>En su origen clásico, la democracia se concibe como <strong>el ejercicio directo del poder</strong> por parte de los ciudadanos. Gobernar no significaba elegir a otros para que decidieran, sino participar activamente en la deliberación y resolución de los asuntos comunes.</p>
+        <p>Aunque este modelo era excluyente y limitado en su alcance social, su núcleo conceptual es relevante: <strong>la democracia nace como decisión</strong>, no como delegación.</p>
+        <div class="quote">La representación aparece históricamente como solución práctica, no como definición esencial.</div>
+      `
+    },
+    {
+      id: "moderna",
+      title: "Democracia moderna-representativa",
+      kicker: "Delegar para gobernar: estabilidad a cambio de distancia",
+      body: `
+        <p>Con el crecimiento de los Estados y la complejidad de las sociedades modernas, la democracia directa fue considerada impracticable. Surge entonces la democracia representativa como una <strong>solución técnica</strong>: los ciudadanos eligen periódicamente a representantes que toman decisiones en su nombre.</p>
+        <p>Este modelo permitió ampliar la participación electoral y dotar de estabilidad a los sistemas políticos. Sin embargo, introdujo una transformación clave: <strong>la ciudadanía dejó de decidir y pasó a delegar</strong>. El acto democrático se redujo, progresivamente, al momento del voto.</p>
+        <p>Cuando la representación se transforma en sustituto de la soberanía, la democracia se vuelve episódica: aparece cada cierto número de años, y se ausenta del resto del tiempo.</p>
+      `
+    },
+    {
+      id: "definicion",
+      title: "Definición operativa",
+      kicker: "La vara con la que se evalúa el caso chileno",
+      body: `
+        <div class="quote">
+          Una democracia efectiva es aquella en la que las personas no solo eligen representantes, sino que participan de manera directa, informada y significativa en la toma de decisiones que afectan a la comunidad, ya sea de forma vinculante o como insumo obligatorio del proceso político.
+        </div>
+        <p>Esta definición no elimina la representación, pero la reordena: la representación deja de ser el fin del proceso democrático y pasa a ser un componente dentro de un sistema más amplio de participación y decisión ciudadana.</p>
+      `
+    },
+    {
+      id: "historia",
+      title: "Implementación histórica en Chile",
+      kicker: "Avances formales con un déficit decisional persistente",
+      body: `
+        <p>La historia política chilena muestra avances importantes en materia de institucionalidad democrática, pero también una constante: <strong>la distancia entre ciudadanía y decisión</strong>.</p>
+        <p>La ampliación del sufragio representó un progreso significativo, pero no alteró el núcleo del sistema: las decisiones continuaron concentradas en órganos representativos.</p>
+        <div class="quote">Chile avanzó en quiénes pueden votar, pero no en quiénes deciden.</div>
+      `
+    },
+    {
+      id: "problema",
+      title: "El problema central hoy",
+      kicker: "Soberanía episódica vs soberanía parlamentaria permanente",
+      body: `
+        <p>En Chile, las decisiones que afectan a la mayoría —leyes, reformas estructurales, políticas públicas— son tomadas casi exclusivamente por el parlamento y el poder ejecutivo.</p>
+        <p>El voto opera como una <strong>delegación total y prolongada</strong> del poder político. Una vez emitido, la capacidad de incidencia ciudadana se diluye hasta el siguiente ciclo electoral.</p>
+        <div class="quote">La soberanía popular es episódica; la soberanía parlamentaria es permanente.</div>
+      `
+    },
+    {
+      id: "tecnologia",
+      title: "Tecnología y propuesta mínima",
+      kicker: "Participación directa como posibilidad histórica realista",
+      body: `
+        <p>El argumento tradicional contra la democracia más directa —la imposibilidad técnica— pierde fuerza hoy. Existen medios digitales para consultas masivas, auditables y trazables, con modalidades híbridas (digital/presencial).</p>
+        <p>Esto no implica reemplazar al parlamento, sino <strong>redefinir su relación con la ciudadanía</strong> mediante mecanismos concretos: consultas obligatorias en proyectos de alto impacto, integración formal de resultados como insumo, y trazabilidad pública de la decisión final.</p>
+        <div class="quote">Transformar la representación en un medio, y no en el sustituto, de la soberanía popular.</div>
+      `
+    }
+  ];
+
+  const $ = (s) => document.querySelector(s);
+  const prevBtn = $("#prevBtn"), nextBtn = $("#nextBtn"), select = $("#sectionSelect");
+  const progBar = $("#progBar"), statusLeft = $("#statusLeft"), statusRight = $("#statusRight");
+  const kicker = $("#kicker"), title = $("#title"), body = $("#body"), hashHint = $("#hashHint");
+
+  let idx = 0;
+
+  function init(){
+    // Build selector
+    select.innerHTML = sections.map((s,i) => {
+      const n = i + 1;
+      return `<option value="${i}">${n}. ${escapeHtml(s.title)}</option>`;
+    }).join("");
+
+    // Start from hash if present
+    const hash = (location.hash || "").replace("#","").trim();
+    const found = sections.findIndex(s => s.id === hash);
+    if(found >= 0) idx = found;
+
+    render();
+    wire();
+  }
+
+  function render(){
+    const s = sections[idx];
+    const now = idx + 1;
+    const total = sections.length;
+
+    kicker.textContent = s.kicker;
+    title.textContent = `${now}. ${s.title}`;
+    body.innerHTML = s.body;
+
+    const pct = Math.round((now / total) * 100);
+    progBar.style.width = pct + "%";
+
+    statusLeft.textContent = `Sección ${now}/${total}`;
+    statusRight.textContent = s.title;
+
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === total - 1;
+
+    select.value = String(idx);
+
+    // Keep hash updated for shareability
+    location.hash = s.id;
+    hashHint.textContent = `Link: #${s.id}`;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function go(n){
+    if(n < 0 || n >= sections.length) return;
+    idx = n;
+    render();
+  }
+
+  function wire(){
+    prevBtn.addEventListener("click", () => go(idx - 1));
+    nextBtn.addEventListener("click", () => go(idx + 1));
+    select.addEventListener("change", () => go(Number(select.value)));
+
+    // Keyboard: left/right
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowLeft") go(idx - 1);
+      if(e.key === "ArrowRight") go(idx + 1);
+    });
+
+    // Hash navigation
+    window.addEventListener("hashchange", () => {
+      const hash = (location.hash || "").replace("#","").trim();
+      if(!hash) return;
+      const found = sections.findIndex(s => s.id === hash);
+      if(found >= 0 && found !== idx){
+        idx = found;
+        render();
+      }
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  init();
+</script>
+</body>
+</html>
